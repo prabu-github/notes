@@ -6,13 +6,15 @@
 \usepackage{scrextend}
 \usepackage{titlesec}
 \usepackage{amsmath}
+\usepackage{booktabs}    % For professional table lines (\toprule, \midrule, \bottomrule)
+\usepackage{subcaption}  % Required for the subtable environment
 
 \let\frac\dfrac
 \usepackage{cellspace}
 \setlength{\cellspacetoplimit}{6pt}    % Minimum space above text
 \setlength{\cellspacebottomlimit}{6pt} % minimum space belowe text
 
-\changefontsizes{14pt}
+\changefontsizes{12pt}
 
 \newcommand{\sectionbreak}{\clearpage}
 
@@ -23,8 +25,95 @@
 \begin{document}
 	\maketitle
 	
+	In this document, we will demonstrate one-level and two-level community weighting with a single plot. 
+			
+	\begin{table}[htbp]
+		\centering
+		\caption{Plots and coverages.}
+		\label{tab:main_grid}
+		
+		% Top-Left Table
+		\begin{subtable}[b]{0.48\textwidth}
+			\centering
+			\caption{Plot for \textbf{one-level} weighting.}
+			\label{tab:table_a}
+			\begin{tabular}{|c Sc|}
+				\hline 
+				$A_1^{ss_1}$  & $\mathcolor{red}{\bm{A_2^{ss_1}}}$  \\ 
+				$B_1^{ss_1}$  & $C_1^{ss_1}$  \\ \hline
+			\end{tabular}
+		\end{subtable}
+		\hfill % Adds horizontal space between the two columns
+		% Top-Right Table
+		\begin{subtable}[b]{0.48\textwidth}
+			\centering
+			\caption{Plot for \textbf{two-level} weighting.}
+			\label{tab:table_b}
+			\begin{tabular}{|c c||c Sc|}
+				\hline 
+				$A_1^{ss_1}$  & $\mathcolor{red}{\bm{A_2^{ss_1}}}$ & $A_1^{ss_2}$ & $C_1^{ss_2}$ \\ 
+				$B_1^{ss_1}$  & $C_1^{ss_1}$ & $D_1^{ss_2}$ & $\mathcolor{blue}{\bm{D_2^{ss_2}}}$ \\ \hline
+			\end{tabular}
+		\end{subtable}
+		
+		\vspace{0.5cm} % Adds vertical spacing between the two rows
+		
+		% --- SECOND ROW ---
+		% Bottom-Left Table
+		\begin{subtable}[b]{0.48\textwidth}
+			\centering
+			\caption{Coverage for \textbf{one-level} weighting}
+			\label{tab:table_c}
+			\begin{tabular}{c c Sc}
+				\toprule 
+				\texttt{SubsampleID} & \texttt{CoverID} & \texttt{Coverage} \\
+				\midrule 
+				$ss_{1}$ & $A$  & $w_{A}^{ss_1}$  \\
+				$ss_{1}$ & $B$  & $w_{B}^{ss_1}$  \\
+				$ss_{1}$ & $C$  & $w_{C}^{ss_1}$  \\
+				\bottomrule
+			\end{tabular}
+%			\begin{tabular}{c c c c c Sc Sc Sc}
+%				\toprule
+%				\texttt{SubsampleID} & \texttt{SubsampleWeight} & \texttt{CoverID} & \texttt{CoverWeight} & \texttt{TraitMean} & \texttt{TraitSdev}\\
+%				\midrule  
+%				$ss_1$ & $W^{ss_1}$ & $A_1$ & $w_{A}^{ss_1}$ & $\mu_{A_1}^{ss_1}$ & $\sigma_{A_1}^{ss_1}$ \\
+%				$ss_1$ & $W^{ss_1}$ & $A_2$ & $w_{A}^{ss_1}$ & $\mathcolor{red}{\bm{\mu_{A_2}^{ss_1}}}$ & $\mathcolor{red}{\bm{\sigma_{A_2}^{ss_1}}}$ \\ 
+%				$ss_1$ & $W^{ss_1}$ & $B_1$ & $w_{B}^{ss_1}$ & $\mu_{B_1}^{ss_1}$ & $\sigma_{B_1}^{ss_1}$ \\
+%				$ss_1$ & $W^{ss_1}$ & $C_1$ & $w_{C}^{ss_1}$ & $\mu_{C_1}^{ss_1}$ & $\sigma_{C_1}^{ss_1}$ \\
+%				\bottomrule
+%			\end{tabular}
+		\end{subtable}
+		\hfill % Adds horizontal space
+		% Bottom-Right Table
+		\begin{subtable}[b]{0.48\textwidth}
+			\centering
+			\caption{Coverage for \textbf{two-level} weighting}
+			\label{tab:table_d}
+			\begin{tabular}{c c Sc}
+				\toprule 
+				\texttt{SubsampleID} & \texttt{CoverID} & \texttt{Coverage} \\ 
+				\midrule  
+				$ss_{1}$ & $A$  & $w_{A}^{ss_1}$  \\ 
+				$ss_{1}$ & $B$  & $w_{B}^{ss_1}$  \\
+				$ss_{1}$ & $C$  & $w_{C}^{ss_1}$  \\ 
+				\hline
+				$ss_{2}$ & $A$  & $w_{A}^{ss_2}$  \\ 
+				$ss_{2}$ & $C$  & $w_{C}^{ss_2}$  \\
+				$ss_{2}$ & $D$  & $w_{D}^{ss_2}$  \\ 
+				\bottomrule
+			\end{tabular}
+		\end{subtable}
+		
+	\end{table}
+		
+	
+		
 	\section*{One level weighting}
 	% The plot
+	
+	A cartoon of a plot and the measured \texttt{CoverID} are shown in~\ref{tab:l1_plot}. There are $3$ \texttt{CoverID}s recorded in the plot. \texttt{CoverID}$={A}$ has two ``individuals"; while \texttt{CoverID}s $B, C$ have one ``individual" each. 
+	
 	\begin{table}[htbp]
 		\centering 
 		\caption{The plot}
@@ -37,10 +126,11 @@
 	\end{table}
 	
 	% The plot composition
+	Field notes for the above plot will record the cover information for each \texttt{CoverID}. This can be recorded as \texttt{CoverPercent} or \texttt{CoverClass}. For \texttt{CoverClass} specification, coverage bins must also be provided. The column \texttt{SubsampleID} 
 	\begin{table}[htbp]
 		\centering 
 		\caption{Field notes for plot composition}
-		\label{tab:l1_field_notes} 
+		\label{tab:l1_field_notes_percent} 
 		\begin{tabular}{|c|c|Sc|}
 			\hline 
 			\texttt{SubsampleID} & \texttt{CoverID} & \texttt{CoverPercent} \\ \hline 
@@ -57,13 +147,13 @@
 		\centering 
 		\caption{The dataframe. \texttt{Trait} standard deviation column is not shown.}
 		\label{tab:l1_dataframe} 
-		\begin{tabular}{|c|c|c|c|c|Sc|Sc|}
+		\begin{tabular}{|c|c|c|c|c|Sc|Sc|Sc|}
 			\hline 
-			\texttt{SampleID} & \texttt{SubsampleID} & \texttt{SubsampleWeight} & \texttt{CoverID} & \texttt{CoverWeight} & \texttt{Trait}\\ \hline 
-			$S_1$  & $ss_1$ & $W^{ss_1}$ & $A_1$ & $w_{A}^{ss_1}=40$ & $t_{A_1}^{ss_1}$ \\ \hline
-			$S_1$  & $ss_1$ & $W^{ss_1}$ & $A_2$ & $w_{A}^{ss_1}=40$ & $\mathcolor{red}{\bm{t_{A_2}^{ss_1}}}$ \\ \hline
-			$S_1$  & $ss_1$ & $W^{ss_1}$ & $B_1$ & $w_{B}^{ss_1}=20$ & $t_{B_1}^{ss_1}$ \\ \hline
-			$S_1$  & $ss_1$ & $W^{ss_1}$ & $C_1$ & $w_{C}^{ss_1}=10$ & $t_{C_1}^{ss_1}$ \\ \hline
+			\texttt{SampleID} & \texttt{SubsampleID} & \texttt{SubsampleWeight} & \texttt{CoverID} & \texttt{CoverWeight} & \texttt{TraitMean} & \texttt{TraitSdev}\\ \hline 
+			$S_1$  & $ss_1$ & $W^{ss_1}$ & $A_1$ & $w_{A}^{ss_1}=40$ & $\mu_{A_1}^{ss_1}$ & $\sigma_{A_1}^{ss_1}$ \\ \hline
+			$S_1$  & $ss_1$ & $W^{ss_1}$ & $A_2$ & $w_{A}^{ss_1}=40$ & $\mathcolor{red}{\bm{\mu_{A_2}^{ss_1}}}$ & $\mathcolor{red}{\bm{\sigma_{A_2}^{ss_1}}}$ \\ \hline
+			$S_1$  & $ss_1$ & $W^{ss_1}$ & $B_1$ & $w_{B}^{ss_1}=20$ & $\mu_{B_1}^{ss_1}$ & $\sigma_{B_1}^{ss_1}$ \\ \hline
+			$S_1$  & $ss_1$ & $W^{ss_1}$ & $C_1$ & $w_{C}^{ss_1}=10$ & $\mu_{C_1}^{ss_1}$ & $\sigma_{C_1}^{ss_1}$ \\ \hline
 		\end{tabular}
 	\end{table}
 		
@@ -83,7 +173,7 @@
 	% Weighted traits for sample
 	\begin{table}[htbp]
 		\centering
-		\caption{Algebra for going from \texttt{SubsampleTrait} to \texttt{SampleTrait}}
+		\caption{Algebra for going from \texttt{SubsampleTrait} to \texttt{CWTrait}}
 		\label{tab:l1_sample_trait}
 		\begin{tabular}{|c|Sc|}
 			\hline 
@@ -106,12 +196,12 @@
 		\item
 		\textbf{Cover weight uncertainty}: Ordinal cover classes and percent cover are two approaches for specifying \texttt{Coverweight} (e.g. $w_{A}^{ss_1}$). Ordinal cover class specification requires binning the range $[0, 100]$ and the bin membership for the considered \texttt{CoverID}. For percent cover, \texttt{CoverID} is specified as a percentage (range: $[0, 100]$) or a proportion (range: $[0, 1]$). Typically, human visual estimates are used for the \texttt{CoverWeight}, and the imprecision of human observation leads to uncertainties in \texttt{CoverWeight}.   
 		
-		\item 
-		\textbf{Sampling \texttt{CWTrait}}: Propagating the \texttt{CWTrait} uncertainty is critical for robust model training and evaluation. Specifically, \texttt{CWTrait} ($\widetilde{y}$) can be computed using sampled values for $t_{c}^{s}$ and $w_{c}^{s}$, where $s$ is \texttt{SubsampleID} (say $ss_1$) and $c$ is the \texttt{CoverID} (e.g., $A$ for $w$ and $A_1$ for $t$). The spectra-trait pair $(X, \widetilde{y})$ is used for model training, with different sampled values of $\widetilde{y}$ for a \texttt{SubsampleID} during various folds of cross-validation.      
+%		\item 
+%		\textbf{Sampling \texttt{CWTrait}}: Propagating the \texttt{CWTrait} uncertainty is critical for robust model training and evaluation. Specifically, \texttt{CWTrait} ($\widetilde{y}$) can be computed using sampled values for $t_{c}^{s}$ and $w_{c}^{s}$, where $s$ is \texttt{SubsampleID} (say $ss_1$) and $c$ is the \texttt{CoverID} (e.g., $A$ for $w$ and $A_1$ for $t$). The spectra-trait pair $(X, \widetilde{y})$ is used for model training, with different sampled values of $\widetilde{y}$ for a \texttt{SubsampleID} during various folds of cross-validation.      
 		
 		\item 
 		\textbf{Montecarlo \texttt{CWTrait} estimation}:
-		Monte-Carlo estimation provides a general, tractable estimate of \texttt{CWTrait} ($\widehat{y}_{\mu}$) (and its standard deviation, $\widehat{y}_{\sigma}$). Given a dataset and distributions for $t_c^{s}$ and $w_c^{s}$, we can compute $\{\widetilde{y_1}, \ldots \widetilde{y_M}\}$ ($\widetilde{y_i}$ uses samples  $(\widetilde{(t_c^{s})_i}$ $\widetilde{(w_c^{s})_i})$). The $\{\widetilde{y_i}\}$ are reduced to yield $\widehat{y}_{\mu}$ and $\widehat{y}_{\sigma}$. The $\widehat{y}_{\mu}$ is used as the ``true" value for model evaluation and in the predicted-vs-true plot. $\widehat{y}_{\sigma}$ provides the error bar for the ``true" value in a predicted-vs-true plot.   
+		Monte-Carlo estimation provides a general, tractable estimate of \texttt{CWTrait} (${y}_{\mu}^{cw}$) (and its standard deviation, $y_{\sigma}^{cw}$). Given a dataset and distributions for $t_c^{s}$ and $w_c^{s}$ (see below), we can compute $\{\widetilde{y_1}, \ldots \widetilde{y_M}\}$ ($\widetilde{y_i}$ uses samples  $(\widetilde{(t_c^{s})_i}$ $\widetilde{(w_c^{s})_i})$ in the formulas in the tables). The $\{\widetilde{y_i}\}$ are reduced to yield $y_{\mu}^{cw}$ and $y_{\sigma}^{cw}$. The $y_{\mu}^{cw}$ is used as the ``true" value for model evaluation and in the predicted-vs-true plot; $y_{\sigma}^{cw}$ provides the error bar for the ``true" value in a predicted-vs-true plot; and sample with mean $y_{\mu}^{cw}$ and standard deviation $y_{\sigma}^{cw}$ is used during model training.
 		
 		\item 
 		\textbf{Ordinal \texttt{CoverWeight} specification}: 
