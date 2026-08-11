@@ -8,16 +8,18 @@
 \usepackage{amsmath}
 \usepackage{booktabs}    % For professional table lines (\toprule, \midrule, \bottomrule)
 \usepackage{subcaption}  % Required for the subtable environment
+\usepackage[table]{xcolor}
 
 \let\frac\dfrac
 \usepackage{cellspace}
 \setlength{\cellspacetoplimit}{6pt}    % Minimum space above text
 \setlength{\cellspacebottomlimit}{6pt} % minimum space belowe text
 
-\changefontsizes{12pt}
+\changefontsizes{10pt}
 
 \newcommand{\sectionbreak}{\clearpage}
-
+\newcommand{\one}{1}
+\newcommand{\two}{2}
 \title{Community weighted traits}
 \author{Prabu Ravindran}
 \date{}
@@ -25,22 +27,23 @@
 \begin{document}
 	\maketitle
 	
-	In this document, we will demonstrate one-level and two-level community weighting with a single plot. 
+	\section*{Plots, coverages, and data frames}
+	We will demonstrate one-level and two-level community weighting with a single plot. Table~\ref{tab:l1_plot} shows, a plot for the one-level example - there is a single subplot for which plot composition is reported. For the two-level example, Table~\ref{tab:l2_plot} shows a plot with \textit{two} subplots - in general there can be \textit{two or more} subplots per plot. The two-level refers to the fact that weighted traits are first computed at the subplot level and these subplot traits are weighted using subplot weights to produce a plot level trait value. One-level weighting is a special case of two-level weighting, where the there is one subplot. Table~\ref{tab:plots_coverages}, provides the employed notation. $A, B, C, D$ represent the cover classes (e.g. species, plant functional types). In Tables~\ref{tab:l1_plot},~\ref{tab:l2_plot}, $A_{r}^{s}$ represents the $r$-th replicate for cover class $A$ in the $s$-th subplot. In Table~\ref{tab:l2_plot}, there are $2$ replicates for cover class $A$ in subplot $1$ ($A_{1}^1, A_{2}^1$) and $2$ replicates for $D$ in subplot $2$ ($D_{1}^1, D_{2}^1$). The cover weight (\texttt{CoverWeight} column) for the various cover classes for the subplots are reported in Tables~\ref{tab:l1_cover},~\ref{tab:l2_cover}. $c_{k}^{s}$, represents the coverage weight for cover class $k$ in subplot $s$. Note that we include subplot identifier in the superscript! 
 			
 	\begin{table}[htbp]
 		\centering
 		\caption{Plots and coverages.}
-		\label{tab:main_grid}
+		\label{tab:plots_coverages}
 		
 		% Top-Left Table
 		\begin{subtable}[b]{0.48\textwidth}
 			\centering
 			\caption{Plot for \textbf{one-level} weighting.}
-			\label{tab:table_a}
+			\label{tab:l1_plot}
 			\begin{tabular}{|c Sc|}
 				\hline 
-				$A_1^{ss_1}$  & $\mathcolor{red}{\bm{A_2^{ss_1}}}$  \\ 
-				$B_1^{ss_1}$  & $C_1^{ss_1}$  \\ \hline
+				$A_1^{\one}$  & $\mathcolor{red}{\bm{A_2^{\one}}}$  \\ 
+				$B_1^{\one}$  & $E_1^{\one}$  \\ \hline
 			\end{tabular}
 		\end{subtable}
 		\hfill % Adds horizontal space between the two columns
@@ -48,11 +51,11 @@
 		\begin{subtable}[b]{0.48\textwidth}
 			\centering
 			\caption{Plot for \textbf{two-level} weighting.}
-			\label{tab:table_b}
-			\begin{tabular}{|c c||c Sc|}
+			\label{tab:l2_plot}
+			\begin{tabular}{|c c|c Sc|}
 				\hline 
-				$A_1^{ss_1}$  & $\mathcolor{red}{\bm{A_2^{ss_1}}}$ & $A_1^{ss_2}$ & $C_1^{ss_2}$ \\ 
-				$B_1^{ss_1}$  & $C_1^{ss_1}$ & $D_1^{ss_2}$ & $\mathcolor{blue}{\bm{D_2^{ss_2}}}$ \\ \hline
+				$A_1^{\one}$  & $\mathcolor{red}{\bm{A_2^{\one}}}$ & $A_1^{\two}$ & $E_1^{\two}$ \\ 
+				$B_1^{\one}$  & $E_1^{\one}$ & $D_1^{\two}$ & $\mathcolor{blue}{\bm{D_2^{\two}}}$ \\ \hline
 			\end{tabular}
 		\end{subtable}
 		
@@ -63,52 +66,154 @@
 		\begin{subtable}[b]{0.48\textwidth}
 			\centering
 			\caption{Coverage for \textbf{one-level} weighting}
-			\label{tab:table_c}
+			\label{tab:l1_cover}
 			\begin{tabular}{c c Sc}
 				\toprule 
-				\texttt{SubsampleID} & \texttt{CoverID} & \texttt{Coverage} \\
+				\texttt{SubplotID} & \texttt{CoverID} & \texttt{CoverWeight} \\
 				\midrule 
-				$ss_{1}$ & $A$  & $w_{A}^{ss_1}$  \\
-				$ss_{1}$ & $B$  & $w_{B}^{ss_1}$  \\
-				$ss_{1}$ & $C$  & $w_{C}^{ss_1}$  \\
+				$\one$ & $A$  & $c_{A}^{\one}$  \\
+				$\one$ & $B$  & $c_{B}^{\one}$  \\
+				$\one$ & $C$  & $c_{E}^{\one}$  \\
 				\bottomrule
 			\end{tabular}
-%			\begin{tabular}{c c c c c Sc Sc Sc}
-%				\toprule
-%				\texttt{SubsampleID} & \texttt{SubsampleWeight} & \texttt{CoverID} & \texttt{CoverWeight} & \texttt{TraitMean} & \texttt{TraitSdev}\\
-%				\midrule  
-%				$ss_1$ & $W^{ss_1}$ & $A_1$ & $w_{A}^{ss_1}$ & $\mu_{A_1}^{ss_1}$ & $\sigma_{A_1}^{ss_1}$ \\
-%				$ss_1$ & $W^{ss_1}$ & $A_2$ & $w_{A}^{ss_1}$ & $\mathcolor{red}{\bm{\mu_{A_2}^{ss_1}}}$ & $\mathcolor{red}{\bm{\sigma_{A_2}^{ss_1}}}$ \\ 
-%				$ss_1$ & $W^{ss_1}$ & $B_1$ & $w_{B}^{ss_1}$ & $\mu_{B_1}^{ss_1}$ & $\sigma_{B_1}^{ss_1}$ \\
-%				$ss_1$ & $W^{ss_1}$ & $C_1$ & $w_{C}^{ss_1}$ & $\mu_{C_1}^{ss_1}$ & $\sigma_{C_1}^{ss_1}$ \\
-%				\bottomrule
-%			\end{tabular}
 		\end{subtable}
 		\hfill % Adds horizontal space
 		% Bottom-Right Table
 		\begin{subtable}[b]{0.48\textwidth}
 			\centering
 			\caption{Coverage for \textbf{two-level} weighting}
-			\label{tab:table_d}
+			\label{tab:l2_cover}
 			\begin{tabular}{c c Sc}
 				\toprule 
-				\texttt{SubsampleID} & \texttt{CoverID} & \texttt{Coverage} \\ 
+				\texttt{SubplotID} & \texttt{CoverID} & \texttt{CoverWeight} \\ 
 				\midrule  
-				$ss_{1}$ & $A$  & $w_{A}^{ss_1}$  \\ 
-				$ss_{1}$ & $B$  & $w_{B}^{ss_1}$  \\
-				$ss_{1}$ & $C$  & $w_{C}^{ss_1}$  \\ 
+				$\one$ & $A$  & $c_{A}^{\one}$  \\ 
+				$\one$ & $B$  & $c_{B}^{\one}$  \\
+				$\one$ & $C$  & $c_{E}^{\one}$  \\ 
 				\hline
-				$ss_{2}$ & $A$  & $w_{A}^{ss_2}$  \\ 
-				$ss_{2}$ & $C$  & $w_{C}^{ss_2}$  \\
-				$ss_{2}$ & $D$  & $w_{D}^{ss_2}$  \\ 
+				$\two$ & $A$  & $c_{A}^{\two}$  \\ 
+				$\two$ & $C$  & $c_{E}^{\two}$  \\
+				$\two$ & $D$  & $c_{D}^{\two}$  \\ 
 				\bottomrule
 			\end{tabular}
 		\end{subtable}
 		
 	\end{table}
 		
+	The data frames for the one-level and two level cases are shown in Table~\ref{tab:data_frames}. The trait information for \texttt{CoverID}$=k$, replicate $r$ for \texttt{SubplotID}$=s$ is provided as: (\texttt{TraitMean}, \texttt{TraitSdev})$=(\mu_{k_r}^s, \sigma_{k_r}^s)$. If the replicates for \texttt{CoverID} are reduced we get Table~\ref{tab:l1_rdf}, where the reduced value in \texttt{TraitSdev} is the root-mean-square of the standard deviations for the \texttt{CoverID}. After reduction, the situation becomes equivalent to the case of having one replicate per \texttt{CoverID}!
 	
+	\begin{table}[htbp]
+		\centering
+		\caption{Data frames.}
+		\label{tab:data_frames}
 		
+		% Top table
+		\begin{subtable}[b]{0.9\textwidth}
+			\centering
+			\caption{Data frame for \textbf{one-level} weighting.}
+			\label{tab:l1_df}
+			\begin{tabular}{c c c Sc Sc Sc}
+				\toprule
+				\texttt{SubplotID} & \texttt{SubplotWeight} & \texttt{CoverID} & \texttt{CoverWeight} & \texttt{TraitMean} & \texttt{TraitSdev}\\ 
+				\midrule
+				$\one$ & $w^{\one}$ & $A_1$ & $c_{A}^{\one}$ & $\mu_{A_1}^{\one}$ & $\sigma_{A_1}^{\one}$ \\
+				$\one$ & $w^{\one}$ & $A_2$ & $c_{A}^{\one}$ & $\mathcolor{red}{\bm{\mu_{A_2}^{\one}}}$ & $\mathcolor{red}{\bm{\sigma_{A_2}^{\one}}}$ \\ 
+				$\one$ & $w^{\one}$ & $B_1$ & $c_{B}^{\one}$ & $\mu_{B_1}^{\one}$ & $\sigma_{B_1}^{\one}$ \\ 
+				$\one$ & $w^{\one}$ & $E_1$ & $c_{E}^{\one}$ & $\mu_{E_1}^{\one}$ & $\sigma_{E_1}^{\one}$ \\ 
+				\bottomrule
+			\end{tabular}
+		\end{subtable}
+		\hfill % Adds horizontal space between the two columns
+		
+		\vspace{0.5cm} % Adds vertical spacing between the two rows
+		
+		% Middle table
+		\begin{subtable}[b]{0.9\textwidth}
+			\centering
+			\caption{Reduced data frame for \textbf{one-level} weighting.}.
+			\label{tab:l1_rdf}
+			\colorbox{gray!20}{
+			\begin{minipage}{\dimexpr\linewidth-2\fboxsep}
+				\centering
+				\vspace{0.2cm} % Padding inside the gray box
+				\begin{tabular}{c c c Sc Sc Sc}
+					\toprule
+					\texttt{SubplotID} & \texttt{SubplotWeight} & \texttt{CoverID} & \texttt{CoverWeight} & \texttt{TraitMean} & \texttt{TraitSdev}\\ 
+					\midrule
+					$\one$ & $w^{\one}$ & $A_1$ & $c_{A}^{\one}$ & $\frac{\mu_{A_1}^{\one} + \mu_{A_1}^{\two}}{2}$ & $\sqrt{\frac{(\sigma_{A_1}^{\one})^2 + (\sigma_{A_2}^{\one})^2}{2}}$ \\
+					$\one$ & $w^{\one}$ & $B_1$ & $c_{B}^{\one}$ & $\mu_{B_1}^{\one}$ & $\sigma_{B_1}^{\one}$ \\ 
+					$\one$ & $w^{\one}$ & $E_1$ & $c_{E}^{\one}$ & $\mu_{E_1}^{\one}$ & $\sigma_{E_1}^{\one}$ \\ 
+					\bottomrule
+				\end{tabular}
+				\vspace{0.2cm}
+			\end{minipage}
+		}
+		\end{subtable}
+		\hfill % Adds horizontal space between the two columns
+		
+		\vspace{0.5cm} % Adds vertical spacing between the two rows
+				
+		% --- SECOND ROW ---
+		% Bottom Table
+		\begin{subtable}[b]{0.9\textwidth}
+			\centering
+			\caption{Data frame for \textbf{two-level} weighting}
+			\label{tab:l2_df}
+			\begin{tabular}{c c c c c Sc}
+				\toprule
+				\texttt{SubplotID} & \texttt{SubplotWeight} & \texttt{CoverID} & \texttt{CoverWeight} & \texttt{TraitMean} & \texttt{TraitSdev}\\ 
+				\midrule
+				$\one$ & $w^{\one}$ & $A_1$ & $c_{A}^{\one}$ & $\mu_{A_1}^{\one}$ & $\sigma_{A_1}^{\one}$ \\
+				$\one$ & $w^{\one}$ & $A_2$ & $c_{A}^{\one}$ & $\mathcolor{red}{\bm{\mu_{A_2}^{\one}}}$ & $\mathcolor{red}{\bm{\sigma_{A_2}^{\one}}}$\\
+				$\one$ & $w^{\one}$ & $B_1$ & $c_{B}^{\one}$ & $\mu_{B_1}^{\one}$ & $\sigma_{B_1}^{\one}$ \\ 
+				$\one$ & $w^{\one}$ & $E_1$ & $c_{E}^{\one}$ & $\mu_{E_1}^{\one}$ & $\sigma_{E_1}^{\one}$ \\ 
+				\hline 
+				$\two$ & $w^{\two}$ & $A_1$ & $c_{A}^{\two}$ & $\mu_{A_1}^{\two}$ & $\sigma_{A_1}^{\two}$ \\
+				$\two$ & $w^{\two}$ & $E_1$ & $c_{E}^{\two}$ & $\mu_{E_1}^{\two}$ & $\sigma_{E_1}^{\two}$ \\
+				$\two$ & $w^{\two}$ & $D_1$ & $c_{D}^{\two}$ & $\mu_{D_1}^{\two}$ & $\sigma_{D_1}^{\two}$ \\
+				$\two$ & $w^{\two}$ & $D_2$ & $c_{D}^{\two}$ & $\mathcolor{blue}{\bm{\mu_{D_2}^{\two}}}$ & $\mathcolor{blue}{\bm{\sigma_{D_2}^{\two}}}$ \\
+				\bottomrule 
+			\end{tabular}
+		\end{subtable}	
+	\end{table}
+	
+	\pagebreak 
+	
+	\section*{Community weighting and sampling}
+	In what follows we will use the following notation for sampled values:
+	\begin{itemize}
+		\item 
+		${[\widetilde{c_k^s}]}_i$: $i$-th sample from a specified distribution $D_c(c_k^s)$. 
+		\item 
+		${[\widetilde{t_{k_r}^s}]}_i$: $i$-th sample from a specified distribution $D_t(\mu_{k_r}^s, \sigma_{k_r}^s)$.
+	\end{itemize} 
+	
+	The community weighted trait for a plot can be obtained as follows:
+	\begin{itemize} 
+		\item For $i \in {1, \ldots, M}$:
+		\begin{itemize} 
+			\item For each subplot $s$:
+			\begin{itemize}
+				\item For every \texttt{CoverID}~$=k$:
+				\begin{itemize} 
+					\item Choose: $r$ (if replicates exist for \texttt{CoverID}).
+					\item Generate: $({[\widetilde{c_k^s}]}_i, {[\widetilde{t_{k_r}^s}]}_i)$.
+				\end{itemize}
+				\item Compute: ${[t^s]}_i = \frac{\sum_k{{[\widetilde{c_k^s}]}_i} {[\widetilde{t_{k_r}^s}]}_i}{\sum_k{{[\widetilde{c_k^s}]}_i}}$ (subplot level weighting). 
+			\end{itemize} 
+		\item Compute $\widetilde{y_i} = \frac{\sum_s{w^s}{{[t^s]}_i}}{\sum_s{w^s}}$ (plot level weighting).
+		\end{itemize}
+		\item Compute:
+		\begin{itemize} 
+			\item $\widehat{\mu} = \mbox{\texttt{mean}}(\widetilde{y_1}, \ldots, \widetilde{y_M})$ (community weighted mean), 
+			\item $\widehat{\sigma} = \mbox{\texttt{sdev}}(\widetilde{y_1}, \ldots, \widetilde{y_M})$ (community weighted standard deviation).
+		\end{itemize}
+	\end{itemize}
+	\textbf{Example (one-level case):} For a particular $i$, let $r=2$ for $A$ was chosen. 
+	${[y^{1}]}_i = {[\widetilde{c_A^{1}}]}_i {[\widetilde{t_{A_2}^{1}}]}_i $
+	
+	
+	Two specifications, \textit{percent cover} and \textit{ordinal class}, can be employed for \texttt{CoverWeight} in tables~\ref{tab:l1_cover},~\ref{tab:l2_cover}. For percent cover, the value for \texttt{CoverWeight} is the percentage of subplot covered by the \texttt{CoverID}. In the case of ordinal class specification, the \texttt{CoverWeight} value represents the bin index for binned coverage ranges. For ordinal class specification, the bin index is mapped to a specified mode value in the specified bin range.   	
 	\section*{One level weighting}
 	% The plot
 	
@@ -117,26 +222,26 @@
 	\begin{table}[htbp]
 		\centering 
 		\caption{The plot}
-		\label{tab:l1_plot} 
+		\label{tab:l1_plotold} 
 		\begin{tabular}{|c|Sc|}
 			\hline 
-			$A_1^{ss_1}$  & $\mathcolor{red}{\bm{A_2^{ss_1}}}$  \\ \hline
-			$B_1^{ss_1}$  & $C_1^{ss_1}$  \\ \hline
+			$A_1^{\one}$  & $\mathcolor{red}{\bm{A_2^{\one}}}$  \\ \hline
+			$B_1^{\one}$  & $E_1^{\one}$  \\ \hline
 		\end{tabular}
 	\end{table}
 	
 	% The plot composition
-	Field notes for the above plot will record the cover information for each \texttt{CoverID}. This can be recorded as \texttt{CoverPercent} or \texttt{CoverClass}. For \texttt{CoverClass} specification, coverage bins must also be provided. The column \texttt{SubsampleID} 
+	Field notes for the above plot will record the cover information for each \texttt{CoverID}. This can be recorded as \texttt{CoverPercent} or \texttt{CoverClass}. For \texttt{CoverClass} specification, coverage bins must also be provided. The column \texttt{SubplotID} 
 	\begin{table}[htbp]
 		\centering 
 		\caption{Field notes for plot composition}
 		\label{tab:l1_field_notes_percent} 
 		\begin{tabular}{|c|c|Sc|}
 			\hline 
-			\texttt{SubsampleID} & \texttt{CoverID} & \texttt{CoverPercent} \\ \hline 
-			$ss_{1}$ & $A$  & $w_{A}^{ss_1}=40\%$  \\ \hline
-			$ss_{1}$ & $B$  & $w_{B}^{ss_1}=20\%$  \\ \hline
-			$ss_{1}$ & $C$  & $w_{C}^{ss_1}=10\%$  \\ \hline
+			\texttt{SubplotID} & \texttt{CoverID} & \texttt{CoverPercent} \\ \hline 
+			$\one$ & $A$  & $c_{A}^{\one}=40\%$  \\ \hline
+			$\one$ & $B$  & $c_{B}^{\one}=20\%$  \\ \hline
+			$\one$ & $C$  & $c_{E}^{\one}=10\%$  \\ \hline
 		\end{tabular}
 	\end{table} 
 	
@@ -149,11 +254,11 @@
 		\label{tab:l1_dataframe} 
 		\begin{tabular}{|c|c|c|c|c|Sc|Sc|Sc|}
 			\hline 
-			\texttt{SampleID} & \texttt{SubsampleID} & \texttt{SubsampleWeight} & \texttt{CoverID} & \texttt{CoverWeight} & \texttt{TraitMean} & \texttt{TraitSdev}\\ \hline 
-			$S_1$  & $ss_1$ & $W^{ss_1}$ & $A_1$ & $w_{A}^{ss_1}=40$ & $\mu_{A_1}^{ss_1}$ & $\sigma_{A_1}^{ss_1}$ \\ \hline
-			$S_1$  & $ss_1$ & $W^{ss_1}$ & $A_2$ & $w_{A}^{ss_1}=40$ & $\mathcolor{red}{\bm{\mu_{A_2}^{ss_1}}}$ & $\mathcolor{red}{\bm{\sigma_{A_2}^{ss_1}}}$ \\ \hline
-			$S_1$  & $ss_1$ & $W^{ss_1}$ & $B_1$ & $w_{B}^{ss_1}=20$ & $\mu_{B_1}^{ss_1}$ & $\sigma_{B_1}^{ss_1}$ \\ \hline
-			$S_1$  & $ss_1$ & $W^{ss_1}$ & $C_1$ & $w_{C}^{ss_1}=10$ & $\mu_{C_1}^{ss_1}$ & $\sigma_{C_1}^{ss_1}$ \\ \hline
+			\texttt{SampleID} & \texttt{SubplotID} & \texttt{SubsampleWeight} & \texttt{CoverID} & \texttt{CoverWeight} & \texttt{TraitMean} & \texttt{TraitSdev}\\ \hline 
+			$S_1$  & $\one$ & $W^{\one}$ & $A_1$ & $c_{A}^{\one}=40$ & $\mu_{A_1}^{\one}$ & $\sigma_{A_1}^{\one}$ \\ \hline
+			$S_1$  & $\one$ & $W^{\one}$ & $A_2$ & $c_{A}^{\one}=40$ & $\mathcolor{red}{\bm{\mu_{A_2}^{\one}}}$ & $\mathcolor{red}{\bm{\sigma_{A_2}^{\one}}}$ \\ \hline
+			$S_1$  & $\one$ & $W^{\one}$ & $B_1$ & $c_{B}^{\one}=20$ & $\mu_{B_1}^{\one}$ & $\sigma_{B_1}^{\one}$ \\ \hline
+			$S_1$  & $\one$ & $W^{\one}$ & $E_1$ & $c_{E}^{\one}=10$ & $\mu_{E_1}^{\one}$ & $\sigma_{E_1}^{\one}$ \\ \hline
 		\end{tabular}
 	\end{table}
 		
@@ -164,9 +269,9 @@
 		\label{tab:l1_subsample_trait}
 		\begin{tabular}{|c|c|c|Sc|}
 			\hline 
-			\texttt{SampleID} & \texttt{SubsampleID} & \texttt{SubsampleWeight} & \texttt{SubsampleTrait} \\ \hline 
-			$S_1$  & $ss_1$ & $W^{ss_1}$ & $t^{ss_1}(t_{A_1}^{ss_1}, t_{B_1}^{ss_1}, t_{C_1}^{ss_1})$ = $\frac{w_{A}^{ss_1}t_{A_1}^{ss_1} + w_{B}^{ss_1}t_{B_1}^{ss_1} + w_{C}^{ss_1}t_{C_1}^{ss_1}}{w_{A}^{ss_1} + w_{B}^{ss_1} + w_{C}^{ss_1}}$  \\ \hline
-			$S_1$  & $ss_1$ & $W^{ss_1}$ & $t^{ss_1}(\mathcolor{red}{\bm{t_{A_2}^{ss_1}}}, t_{B_1}^{ss_1}, t_{C_1}^{ss_1}) = \frac{w_{A}^{ss_1}\mathcolor{red}{t_{A_2}^{ss_1}} + w_{B}^{ss_1}t_{B_1}^{ss_1} + w_{C}^{ss_1}t_{C_1}^{ss_1}}{w_{A}^{ss_1} + w_{B}^{ss_1} + w_{C}^{ss_1}}$ \\ \hline
+			\texttt{SampleID} & \texttt{SubplotID} & \texttt{SubsampleWeight} & \texttt{SubsampleTrait} \\ \hline 
+			$S_1$  & $\one$ & $W^{\one}$ & $t^{\one}(t_{A_1}^{\one}, t_{B_1}^{\one}, t_{E_1}^{\one})$ = $\frac{c_{A}^{\one}t_{A_1}^{\one} + c_{B}^{\one}t_{B_1}^{\one} + c_{E}^{\one}t_{E_1}^{\one}}{c_{A}^{\one} + c_{B}^{\one} + c_{E}^{\one}}$  \\ \hline
+			$S_1$  & $\one$ & $W^{\one}$ & $t^{\one}(\mathcolor{red}{\bm{t_{A_2}^{\one}}}, t_{B_1}^{\one}, t_{E_1}^{\one}) = \frac{c_{A}^{\one}\mathcolor{red}{t_{A_2}^{\one}} + c_{B}^{\one}t_{B_1}^{\one} + c_{E}^{\one}t_{E_1}^{\one}}{c_{A}^{\one} + c_{B}^{\one} + c_{E}^{\one}}$ \\ \hline
 		\end{tabular}
 	\end{table}
 
@@ -178,8 +283,8 @@
 		\begin{tabular}{|c|Sc|}
 			\hline 
 			\texttt{SampleID} & \texttt{CWTrait}\\ \hline 
-			$S_1$  & $T = \frac{W^{ss_1}t^{ss_1}(t_{A_1}^{ss_1}, t_{B_1}^{ss_1}, t_{C_1}^{ss_1})}{W^{ss_1}}$ \\ \hline
-			$S_1$  & $T = \frac{W^{ss_1}t^{ss_1}(\mathcolor{red}{\bm{t_{A_2}^{ss_1}}}, t_{B_1}^{ss_1}, t_{C_1}^{ss_1})}{W^{ss_1}}$ \\ \hline
+			$S_1$  & $T = \frac{W^{\one}t^{\one}(t_{A_1}^{\one}, t_{B_1}^{\one}, t_{E_1}^{\one})}{W^{\one}}$ \\ \hline
+			$S_1$  & $T = \frac{W^{\one}t^{\one}(\mathcolor{red}{\bm{t_{A_2}^{\one}}}, t_{B_1}^{\one}, t_{E_1}^{\one})}{W^{\one}}$ \\ \hline
 		\end{tabular}
 	\end{table}	
 	
@@ -188,20 +293,20 @@
 	\section*{Notes} 
 	\begin{itemize}
 		\item
-		\textbf{Trait uncertainty}: The value used for (say) $t_{A_1}^{ss_1}$ can be sampled from a distribution specified with columns for mean trait value and the associated standard deviation. In our context, the mean and deviations are typically produced from leaf-level model predictions. The trait standard deviation column is omitted in the tables for clarity. 
+		\textbf{Trait uncertainty}: The value used for (say) $t_{A_1}^{\one}$ can be sampled from a distribution specified with columns for mean trait value and the associated standard deviation. In our context, the mean and deviations are typically produced from leaf-level model predictions. The trait standard deviation column is omitted in the tables for clarity. 
 		
 		\item 
 		\textbf{Cover replicate uncertainty}: The two trait values for \texttt{CWTrait} in table~\ref{tab:l1_sample_trait} (and column \texttt{SubsampleTrait} in table~\ref{tab:l1_subsample_trait}) are due to choice of the replicate for \texttt{CoverID} $A$. This is ``specified" by the number of replicates for each \texttt{CoverID}. 
 		
 		\item
-		\textbf{Cover weight uncertainty}: Ordinal cover classes and percent cover are two approaches for specifying \texttt{Coverweight} (e.g. $w_{A}^{ss_1}$). Ordinal cover class specification requires binning the range $[0, 100]$ and the bin membership for the considered \texttt{CoverID}. For percent cover, \texttt{CoverID} is specified as a percentage (range: $[0, 100]$) or a proportion (range: $[0, 1]$). Typically, human visual estimates are used for the \texttt{CoverWeight}, and the imprecision of human observation leads to uncertainties in \texttt{CoverWeight}.   
+		\textbf{Cover weight uncertainty}: Ordinal cover classes and percent cover are two approaches for specifying \texttt{Coverweight} (e.g. $c_{A}^{\one}$). Ordinal cover class specification requires binning the range $[0, 100]$ and the bin membership for the considered \texttt{CoverID}. For percent cover, \texttt{CoverID} is specified as a percentage (range: $[0, 100]$) or a proportion (range: $[0, 1]$). Typically, human visual estimates are used for the \texttt{CoverWeight}, and the imprecision of human observation leads to uncertainties in \texttt{CoverWeight}.   
 		
 %		\item 
-%		\textbf{Sampling \texttt{CWTrait}}: Propagating the \texttt{CWTrait} uncertainty is critical for robust model training and evaluation. Specifically, \texttt{CWTrait} ($\widetilde{y}$) can be computed using sampled values for $t_{c}^{s}$ and $w_{c}^{s}$, where $s$ is \texttt{SubsampleID} (say $ss_1$) and $c$ is the \texttt{CoverID} (e.g., $A$ for $w$ and $A_1$ for $t$). The spectra-trait pair $(X, \widetilde{y})$ is used for model training, with different sampled values of $\widetilde{y}$ for a \texttt{SubsampleID} during various folds of cross-validation.      
+%		\textbf{Sampling \texttt{CWTrait}}: Propagating the \texttt{CWTrait} uncertainty is critical for robust model training and evaluation. Specifically, \texttt{CWTrait} ($\widetilde{y}$) can be computed using sampled values for $t_{E}^{s}$ and $c_{E}^{s}$, where $s$ is \texttt{SubplotID} (say $\one$) and $c$ is the \texttt{CoverID} (e.g., $A$ for $w$ and $A_1$ for $t$). The spectra-trait pair $(X, \widetilde{y})$ is used for model training, with different sampled values of $\widetilde{y}$ for a \texttt{SubplotID} during various folds of cross-validation.      
 		
 		\item 
 		\textbf{Montecarlo \texttt{CWTrait} estimation}:
-		Monte-Carlo estimation provides a general, tractable estimate of \texttt{CWTrait} (${y}_{\mu}^{cw}$) (and its standard deviation, $y_{\sigma}^{cw}$). Given a dataset and distributions for $t_c^{s}$ and $w_c^{s}$ (see below), we can compute $\{\widetilde{y_1}, \ldots \widetilde{y_M}\}$ ($\widetilde{y_i}$ uses samples  $(\widetilde{(t_c^{s})_i}$ $\widetilde{(w_c^{s})_i})$ in the formulas in the tables). The $\{\widetilde{y_i}\}$ are reduced to yield $y_{\mu}^{cw}$ and $y_{\sigma}^{cw}$. The $y_{\mu}^{cw}$ is used as the ``true" value for model evaluation and in the predicted-vs-true plot; $y_{\sigma}^{cw}$ provides the error bar for the ``true" value in a predicted-vs-true plot; and sample with mean $y_{\mu}^{cw}$ and standard deviation $y_{\sigma}^{cw}$ is used during model training.
+		Monte-Carlo estimation provides a general, tractable estimate of \texttt{CWTrait} (${y}_{\mu}^{cw}$) (and its standard deviation, $y_{\sigma}^{cw}$). Given a dataset and distributions for $t_c^{s}$ and $c_c^{s}$ (see below), we can compute $\{\widetilde{y_1}, \ldots \widetilde{y_M}\}$ ($\widetilde{y_i}$ uses samples  $(\widetilde{(t_c^{s})_i}$ $\widetilde{(c_c^{s})_i})$ in the formulas in the tables). The $\{\widetilde{y_i}\}$ are reduced to yield $y_{\mu}^{cw}$ and $y_{\sigma}^{cw}$. The $y_{\mu}^{cw}$ is used as the ``true" value for model evaluation and in the predicted-vs-true plot; $y_{\sigma}^{cw}$ provides the error bar for the ``true" value in a predicted-vs-true plot; and sample with mean $y_{\mu}^{cw}$ and standard deviation $y_{\sigma}^{cw}$ is used during model training.
 		
 		\item 
 		\textbf{Ordinal \texttt{CoverWeight} specification}: 
@@ -223,7 +328,7 @@
 				\end{tabular}
 			\end{table}	
 			\item
-			A mode $r_b$, concentration $k_b$, support $[\texttt{max}(0, r_{b - 1}), \texttt{min}(r_{b + 1}, 100)]$, \texttt{Beta} distribution is used for sampling $\widetilde{(w_c^{s})_i}$, if \texttt{CoverWeight} = $b$. 
+			A mode $r_b$, concentration $k_b$, support $[\texttt{max}(0, r_{b - 1}), \texttt{min}(r_{b + 1}, 100)]$, \texttt{Beta} distribution is used for sampling $\widetilde{(c_c^{s})_i}$, if \texttt{CoverWeight} = $b$. 
 		\end{itemize} 
 					
 				
@@ -248,7 +353,7 @@
 				\end{tabular}
 			\end{table}
 			\item 
-			A \texttt{TruncNormal} with mode $p$ and range $[\texttt{max}(0, p - u_b), \texttt{min}(p + u_b, 100)]$ is used for sampling $\widetilde{(w_c^{s})_i}$, if $p \in [e_{b - 1}, e_{b})$.
+			A \texttt{TruncNormal} with mode $p$ and range $[\texttt{max}(0, p - u_b), \texttt{min}(p + u_b, 100)]$ is used for sampling $\widetilde{(c_c^{s})_i}$, if $p \in [e_{b - 1}, e_{b})$.
 			
 		\end{itemize} 
 			
@@ -264,11 +369,11 @@
 	\begin{table}[htbp]
 		\centering 
 		\caption{The plot}
-		\label{tab:l2_plot}  
+		\label{tab:l2_plotold}  
 		\begin{tabular}{|c|c||c|Sc|}
 			\hline 
-			$A_1^{ss_1}$  & $\mathcolor{red}{\bm{A_2^{ss_1}}}$ & $A_1^{ss_2}$ & $C_1^{ss_2}$ \\ \hline
-			$B_1^{ss_1}$  & $C_1^{ss_1}$ & $D_1^{ss_2}$ & $\mathcolor{blue}{\bm{D_2^{ss_2}}}$ \\ \hline
+			$A_1^{\one}$  & $\mathcolor{red}{\bm{A_2^{\one}}}$ & $A_1^{\two}$ & $E_1^{\two}$ \\ \hline
+			$B_1^{\one}$  & $E_1^{\one}$ & $D_1^{\two}$ & $\mathcolor{blue}{\bm{D_2^{\two}}}$ \\ \hline
 		\end{tabular}
 	\end{table}
 	
@@ -279,14 +384,14 @@
 		\label{tab:l2_field_notes}
 		\begin{tabular}{|c|c|Sc|}
 			\hline 
-			\texttt{SubsampleID} & \texttt{CoverID} & \texttt{CoverPercent} \\ \hline 
-			$ss_{1}$ & $A$  & $w_{A}^{ss_1}$  \\ \hline
-			$ss_{1}$ & $B$  & $w_{B}^{ss_1}$  \\ \hline
-			$ss_{1}$ & $C$  & $w_{C}^{ss_1}$  \\ \hline
+			\texttt{SubplotID} & \texttt{CoverID} & \texttt{CoverPercent} \\ \hline 
+			$\one$ & $A$  & $c_{A}^{\one}$  \\ \hline
+			$\one$ & $B$  & $c_{B}^{\one}$  \\ \hline
+			$\one$ & $C$  & $c_{E}^{\one}$  \\ \hline
 			
-			$ss_{2}$ & $A$  & $w_{A}^{ss_2}$  \\ \hline
-			$ss_{2}$ & $C$  & $w_{C}^{ss_2}$  \\ \hline
-			$ss_{2}$ & $D$  & $w_{D}^{ss_2}$  \\ \hline
+			$\two$ & $A$  & $c_{A}^{\two}$  \\ \hline
+			$\two$ & $C$  & $c_{E}^{\two}$  \\ \hline
+			$\two$ & $D$  & $c_{D}^{\two}$  \\ \hline
 		\end{tabular}
 	\end{table} 
 	
@@ -300,16 +405,16 @@
 		\label{tab:l2_dataframe}
 		\begin{tabular}{|c|c|c|c|c|Sc|}
 			\hline 
-			\texttt{SampleID} & \texttt{SubsampleID} & \texttt{SubsampleWeight} & \texttt{CoverID} & \texttt{CoverWeight} & \texttt{Trait}\\ \hline 
-			$S_1$  & $ss_1$ & $W^{ss_1}$ & $A_1$ & $w_{A}^{ss_1}$ & $t_{A_1}^{ss_1}$ \\ \hline
-			$S_1$  & $ss_1$ & $W^{ss_1}$ & $A_2$ & $w_{A}^{ss_1}$ & $\mathcolor{red}{\bm{t_{A_2}^{ss_1}}}$ \\ \hline
-			$S_1$  & $ss_1$ & $W^{ss_1}$ & $B_1$ & $w_{B}^{ss_1}$ & $t_{B_1}^{ss_1}$ \\ \hline
-			$S_1$  & $ss_1$ & $W^{ss_1}$ & $C_1$ & $w_{C}^{ss_1}$ & $t_{C_1}^{ss_1}$ \\ \hline
+			\texttt{SampleID} & \texttt{SubplotID} & \texttt{SubsampleWeight} & \texttt{CoverID} & \texttt{CoverWeight} & \texttt{Trait}\\ \hline 
+			$S_1$  & $\one$ & $W^{\one}$ & $A_1$ & $c_{A}^{\one}$ & $t_{A_1}^{\one}$ \\ \hline
+			$S_1$  & $\one$ & $W^{\one}$ & $A_2$ & $c_{A}^{\one}$ & $\mathcolor{red}{\bm{t_{A_2}^{\one}}}$ \\ \hline
+			$S_1$  & $\one$ & $W^{\one}$ & $B_1$ & $c_{B}^{\one}$ & $t_{B_1}^{\one}$ \\ \hline
+			$S_1$  & $\one$ & $W^{\one}$ & $E_1$ & $c_{E}^{\one}$ & $t_{E_1}^{\one}$ \\ \hline
 		
-			$S_1$  & $ss_2$ & $W^{ss_2}$ & $A_1$ & $w_{A}^{ss_2}$ & $t_{A_1}^{ss_2}$ \\ \hline
-			$S_1$  & $ss_2$ & $W^{ss_2}$ & $C_1$ & $w_{C}^{ss_2}$ & $t_{C_1}^{ss_2}$ \\ \hline
-			$S_1$  & $ss_2$ & $W^{ss_2}$ & $D_1$ & $w_{D}^{ss_2}$ & $t_{D_1}^{ss_2}$ \\ \hline
-			$S_1$  & $ss_2$ & $W^{ss_2}$ & $D_2$ & $w_{D}^{ss_2}$ & $\mathcolor{blue}{\bm{t_{D_2}^{ss_2}}}$ \\ \hline
+			$S_1$  & $\two$ & $W^{\two}$ & $A_1$ & $c_{A}^{\two}$ & $t_{A_1}^{\two}$ \\ \hline
+			$S_1$  & $\two$ & $W^{\two}$ & $E_1$ & $c_{E}^{\two}$ & $t_{E_1}^{\two}$ \\ \hline
+			$S_1$  & $\two$ & $W^{\two}$ & $D_1$ & $c_{D}^{\two}$ & $t_{D_1}^{\two}$ \\ \hline
+			$S_1$  & $\two$ & $W^{\two}$ & $D_2$ & $c_{D}^{\two}$ & $\mathcolor{blue}{\bm{t_{D_2}^{\two}}}$ \\ \hline
 		\end{tabular}
 	\end{table}
 	
@@ -320,13 +425,13 @@
 		\label{tab:l2_subsample_trait}
 		\begin{tabular}{|c|c|c|Sc|}
 			\hline 
-			\texttt{SampleID} & \texttt{SubsampleID} & \texttt{SubsampleWeight} & \texttt{SubsampleTrait} \\ \hline 
+			\texttt{SampleID} & \texttt{SubplotID} & \texttt{SubsampleWeight} & \texttt{SubsampleTrait} \\ \hline 
 			
-			$S_1$  & $ss_1$ & $W^{ss_1}$ & $t^{ss_1}(t_{A_1}^{ss_1}, t_{B_1}^{ss_1}, t_{C_1}^{ss_1}) = \frac{w_{A}^{ss_1}t_{A_1}^{ss_1} + w_{B}^{ss_1}t_{B_1}^{ss_1} + w_{C}^{ss_1}t_{C_1}^{ss_1}}{w_{A}^{ss_1} + w_{B}^{ss_1} + w_{C}^{ss_1}}$ \\ \hline
-			$S_1$  & $ss_1$ & $W^{ss_1}$ & $t^{ss_1}(\mathcolor{red}{\bm{t_{A_2}^{ss_1}}}, t_{B_1}^{ss_1}, t_{C_1}^{ss_1}) = \frac{w_{A}^{ss_1}\mathcolor{red}{\bm{t_{A_2}^{ss_1}}} + w_{B}^{ss_1}t_{B_1}^{ss_1} + w_{C}^{ss_1}t_{C_1}^{ss_1}}{w_{A}^{ss_1} + w_{B}^{ss_1} + w_{C}^{ss_1}}$ \\ \hline
+			$S_1$  & $\one$ & $W^{\one}$ & $t^{\one}(t_{A_1}^{\one}, t_{B_1}^{\one}, t_{E_1}^{\one}) = \frac{c_{A}^{\one}t_{A_1}^{\one} + c_{B}^{\one}t_{B_1}^{\one} + c_{E}^{\one}t_{E_1}^{\one}}{c_{A}^{\one} + c_{B}^{\one} + c_{E}^{\one}}$ \\ \hline
+			$S_1$  & $\one$ & $W^{\one}$ & $t^{\one}(\mathcolor{red}{\bm{t_{A_2}^{\one}}}, t_{B_1}^{\one}, t_{E_1}^{\one}) = \frac{c_{A}^{\one}\mathcolor{red}{\bm{t_{A_2}^{\one}}} + c_{B}^{\one}t_{B_1}^{\one} + c_{E}^{\one}t_{E_1}^{\one}}{c_{A}^{\one} + c_{B}^{\one} + c_{E}^{\one}}$ \\ \hline
 			
-			$S_1$  & $ss_2$ & $W^{ss_2}$ & $t^{ss_2}(t_{A_1}^{ss_2}, t_{C_1}^{ss_2}, t_{D_1}^{ss_2}) = \frac{w_{A}^{ss_2}t_{A_1}^{ss_2} + w_{C}^{ss_2}t_{C_1}^{ss_2} + w_{D}^{ss_2}t_{D_1}^{ss_2}}{w_{A}^{ss_2} + w_{C}^{ss_2} + w_{D}^{ss_2}}$ \\ \hline
-			$S_1$  & $ss_2$ & $W^{ss_2}$ & $t^{ss_2}(t_{A_1}^{ss_2}, t_{C_1}^{ss_2}, \mathcolor{blue}{\bm{t_{D_2}^{ss_2}}}) = \frac{w_{A}^{ss_2}t_{A_1}^{ss_2} + w_{C}^{ss_2}t_{C_1}^{ss_2} + w_{D}^{ss_2}\mathcolor{blue}{\bm{t_{D_2}^{ss_2}}}}{w_{A}^{ss_2} + w_{C}^{ss_2} + w_{D}^{ss_2}}$ \\ \hline
+			$S_1$  & $\two$ & $W^{\two}$ & $t^{\two}(t_{A_1}^{\two}, t_{E_1}^{\two}, t_{D_1}^{\two}) = \frac{c_{A}^{\two}t_{A_1}^{\two} + c_{E}^{\two}t_{E_1}^{\two} + c_{D}^{\two}t_{D_1}^{\two}}{c_{A}^{\two} + c_{E}^{\two} + c_{D}^{\two}}$ \\ \hline
+			$S_1$  & $\two$ & $W^{\two}$ & $t^{\two}(t_{A_1}^{\two}, t_{E_1}^{\two}, \mathcolor{blue}{\bm{t_{D_2}^{\two}}}) = \frac{c_{A}^{\two}t_{A_1}^{\two} + c_{E}^{\two}t_{E_1}^{\two} + c_{D}^{\two}\mathcolor{blue}{\bm{t_{D_2}^{\two}}}}{c_{A}^{\two} + c_{E}^{\two} + c_{D}^{\two}}$ \\ \hline
 			
 			
 		\end{tabular}
@@ -340,10 +445,10 @@
 		\begin{tabular}{|c|Sc|}
 			\hline 
 			\texttt{SampleID} & \texttt{CWTrait}\\ \hline 
-			$S_1$  & $T = \frac{W^{ss_1}t^{ss_1}(t_{A_1}^{ss_1}, t_{B_1}^{ss_1}, t_{C_1}^{ss_1}) + W^{ss_2}t^{ss_2}(t_{A_1}^{ss_2}, t_{C_1}^{ss_2}, t_{D_1}^{ss_2})}{W^{ss_1} + W^{ss_2}}$ \\ \hline
-			$S_1$  & $T = \frac{W^{ss_1}t^{ss_1}(\mathcolor{red}{\bm{t_{A_2}^{ss_1}}}, t_{B_1}^{ss_1}, t_{C_1}^{ss_1}) + W^{ss_2}t^{ss_2}(t_{A_1}^{ss_2}, t_{C_1}^{ss_2}, t_{D_1}^{ss_2})}{W^{ss_1} + W^{ss_2}}$ \\ \hline
-			$S_1$  & $T = \frac{W^{ss_1}t^{ss_1}(t_{A_1}^{ss_1}, t_{B_1}^{ss_1}, t_{C_1}^{ss_1}) + W^{ss_2}t^{ss_2}(t_{A_1}^{ss_2}, t_{C_1}^{ss_2}, \mathcolor{blue}{\bm{t_{D_2}^{ss_2}}})}{W^{ss_1} + W^{ss_2}}$ \\ \hline
-			$S_1$  & $T = \frac{W^{ss_1}t^{ss_1}(\mathcolor{red}{\bm{t_{A_2}^{ss_1}}}, t_{B_1}^{ss_1}, t_{C_1}^{ss_1}) + W^{ss_2}t^{ss_2}(t_{A_1}^{ss_2}, t_{C_1}^{ss_2}, \mathcolor{blue}{\bm{t_{D_2}^{ss_2}}})}{W^{ss_1} + W^{ss_2}}$ \\ \hline
+			$S_1$  & $T = \frac{W^{\one}t^{\one}(t_{A_1}^{\one}, t_{B_1}^{\one}, t_{E_1}^{\one}) + W^{\two}t^{\two}(t_{A_1}^{\two}, t_{E_1}^{\two}, t_{D_1}^{\two})}{W^{\one} + W^{\two}}$ \\ \hline
+			$S_1$  & $T = \frac{W^{\one}t^{\one}(\mathcolor{red}{\bm{t_{A_2}^{\one}}}, t_{B_1}^{\one}, t_{E_1}^{\one}) + W^{\two}t^{\two}(t_{A_1}^{\two}, t_{E_1}^{\two}, t_{D_1}^{\two})}{W^{\one} + W^{\two}}$ \\ \hline
+			$S_1$  & $T = \frac{W^{\one}t^{\one}(t_{A_1}^{\one}, t_{B_1}^{\one}, t_{E_1}^{\one}) + W^{\two}t^{\two}(t_{A_1}^{\two}, t_{E_1}^{\two}, \mathcolor{blue}{\bm{t_{D_2}^{\two}}})}{W^{\one} + W^{\two}}$ \\ \hline
+			$S_1$  & $T = \frac{W^{\one}t^{\one}(\mathcolor{red}{\bm{t_{A_2}^{\one}}}, t_{B_1}^{\one}, t_{E_1}^{\one}) + W^{\two}t^{\two}(t_{A_1}^{\two}, t_{E_1}^{\two}, \mathcolor{blue}{\bm{t_{D_2}^{\two}}})}{W^{\one} + W^{\two}}$ \\ \hline
 		\end{tabular}
 	\end{table}	
 	
