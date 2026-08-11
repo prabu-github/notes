@@ -247,14 +247,44 @@
 
 \section*{Distributions for sampling}
 \subsection*{Trait sampling}
-For generating the samples ${[\widetilde{t_{k_r}^s}]}_i$, the distribution $D_t$ is a truncated normal with mean and standard deviation: $(\mu_{k_r}^s, \sigma_{k_r}^s)$. Along with the two moments, the truncation support must also be specified. Additionally, value clipping of the generated samples may be required (e.g. disallowing non-negative values). 
+For generating the samples ${[\widetilde{t_{k_r}^s}]}_i$, the distribution $D_t$ is a truncated normal with mean and standard deviation: $(\mu_{k_r}^s, \sigma_{k_r}^s)$. Along with the two moments, the truncation support needs specification. Additionally, value clipping of the generated samples may be required (e.g. disallowing non-negative values). 
 
 \subsection*{\texttt{CoverWeight} sampling}
+
 \begin{itemize}
-\item \textbf{Percent cover}:	
-\item \textbf{Ordinal class}:
-\end{itemize}
+	\item \textbf{Percent cover}: If \texttt{CoverWeight} = $r$, $r \in [l_j, r_j]$, a \texttt{TrunNormal} distribution with mode $r$, standard deviation $d_j$ and support $[l_j, r_j]$ is used for sampling ${[\widetilde{c_k^s}]}_i$. 
+	\begin{table}[htbp]
+		\centering
+		\caption{Specification for percent cover}
+		\label{tab:percent_cover}
+		\begin{tabular}{c c c Sc}
+			\toprule 
+			\texttt{Index} & \texttt{Left} & \texttt{Right} & \texttt{Sdev} \\ 
+			\midrule  
+			$1$  & $l_1$ & $r_1$ & $d_1$ \\ 
+			$\cdots$ & $\cdots$ & $\cdots$ & $\cdots$ \\ 
+			$B$  & $l_B$ & $r_B$ & $d_B$ \\
+			\bottomrule 
+		\end{tabular}
+	\end{table}
 	
-	
+	\item \textbf{Ordinal class}: If \texttt{CoverWeight} = $j$, a \texttt{Beta} distribution with mode $p_j$, concentration $q_j$, and support $[l_j, r_j]$ is used for sampling ${[\widetilde{c_k^s}]}_i$. The bin details are provided as in Table~\ref{tab:ordinal_cover}. 
+		\begin{table}[htbp]
+			\centering
+			\caption{Specification for ordinal cover}
+			\label{tab:ordinal_cover}
+			\begin{tabular}{c c c c Sc}  
+				\toprule 
+				\texttt{Index} & \texttt{Peak} & \texttt{Concentration} & \texttt{Left} & \texttt{Right} \\
+				\midrule   
+				$1$  & $p_1$ & $q_1$ & $l_1$ & $r_1$ \\ 
+				$\cdots$ & $\cdots$ & $\cdots$ & $\cdots$ & $\cdots$ \\ 
+				$B$  & $p_B$ & $q_B$ & $l_B$ & $r_B$\\
+				\bottomrule 
+			\end{tabular}
+		\end{table}	
+		
+	\item \textbf{Role of bins}: For percent cover the bins are used for specifying a cover dependent uncertainty (via $d_j, l_j, r_j$) whereas in the case of ordinal class specficiation it defines the mode \textit{and} cover dependent uncertainty (mode is via $p_j$ and uncertainty via $q_j, j_j, r_j$).   
+	\end{itemize}
 	
 \end{document}
