@@ -43,7 +43,7 @@
 			\label{tab:l1_plot}
 			\begin{tabular}{|c Sc|}
 				\hline 
-				$A_1^{\one}$  & \colorbox{pink}{$\bm{A_2^{\one}}$}  \\ 
+				$A_1^{\one}$  & \colorbox{pink}{$A_2^{\one}$}  \\ 
 				$B_1^{\one}$  & $E_1^{\one}$  \\ \hline
 			\end{tabular}
 		\end{subtable}
@@ -55,8 +55,8 @@
 			\label{tab:l2_plot}
 			\begin{tabular}{|c c|c Sc|}
 				\hline 
-				$A_1^{\one}$  & \colorbox{pink}{$\bm{A_2^{\one}}$} & $A_1^{\two}$ & $E_1^{\two}$ \\ 
-				$B_1^{\one}$  & $E_1^{\one}$ & $D_1^{\two}$ & \colorbox{LightGreen}{$\bm{D_2^{\two}}$} \\ \hline
+				$A_1^{\one}$  & \colorbox{pink}{$A_2^{\one}$} & $A_1^{\two}$ & $E_1^{\two}$ \\ 
+				$B_1^{\one}$  & $E_1^{\one}$ & $D_1^{\two}$ & \colorbox{LightGreen}{$D_2^{\two}$} \\ \hline
 			\end{tabular}
 		\end{subtable}
 		
@@ -118,7 +118,7 @@
 				\texttt{SubplotID} & \texttt{SubplotWeight} & \texttt{CoverID} & \texttt{CoverWeight} & \texttt{TraitMean} & \texttt{TraitSdev}\\ 
 				\midrule
 				$\one$ & $w^{\one}$ & $A_1$ & $c_{A}^{\one}$ & $\mu_{A_1}^{\one}$ & $\sigma_{A_1}^{\one}$ \\
-				$\one$ & $w^{\one}$ & $A_2$ & $c_{A}^{\one}$ & \colorbox{pink}{$\bm{\mu_{A_2}^{\one}}$} & \colorbox{pink}{$\bm{\sigma_{A_2}^{\one}}$} \\ 
+				$\one$ & $w^{\one}$ & $A_2$ & $c_{A}^{\one}$ & \colorbox{pink}{$\mu_{A_2}^{\one}$} & \colorbox{pink}{$\sigma_{A_2}^{\one}$} \\ 
 				$\one$ & $w^{\one}$ & $B_1$ & $c_{B}^{\one}$ & $\mu_{B_1}^{\one}$ & $\sigma_{B_1}^{\one}$ \\ 
 				$\one$ & $w^{\one}$ & $E_1$ & $c_{E}^{\one}$ & $\mu_{E_1}^{\one}$ & $\sigma_{E_1}^{\one}$ \\ 
 				\bottomrule
@@ -141,7 +141,7 @@
 					\toprule
 					\texttt{SubplotID} & \texttt{SubplotWeight} & \texttt{CoverID} & \texttt{CoverWeight} & \texttt{TraitMean} & \texttt{TraitSdev}\\ 
 					\midrule
-					$\one$ & $w^{\one}$ & $A_1$ & $c_{A}^{\one}$ & $\frac{\mu_{A_1}^{\one} + \mu_{A_1}^{\two}}{2}$ & $\sqrt{\frac{(\sigma_{A_1}^{\one})^2 + (\sigma_{A_2}^{\one})^2}{2}}$ \\
+					$\one$ & $w^{\one}$ & $A_1$ & $c_{A}^{\one}$ & $\frac{\mu_{A_1}^{\one} + \mu_{A_1}^{\two}}{2}$ & $\sqrt{\frac{(\sigma_{A_1}^{\one})^2 + (\sigma_{A_2}^{\one})^2}{2} \rule{0pt}{20pt} }$ \\
 					$\one$ & $w^{\one}$ & $B_1$ & $c_{B}^{\one}$ & $\mu_{B_1}^{\one}$ & $\sigma_{B_1}^{\one}$ \\ 
 					$\one$ & $w^{\one}$ & $E_1$ & $c_{E}^{\one}$ & $\mu_{E_1}^{\one}$ & $\sigma_{E_1}^{\one}$ \\ 
 					\bottomrule
@@ -165,14 +165,14 @@
 				\texttt{SubplotID} & \texttt{SubplotWeight} & \texttt{CoverID} & \texttt{CoverWeight} & \texttt{TraitMean} & \texttt{TraitSdev}\\ 
 				\midrule
 				$\one$ & $w^{\one}$ & $A_1$ & $c_{A}^{\one}$ & $\mu_{A_1}^{\one}$ & $\sigma_{A_1}^{\one}$ \\
-				$\one$ & $w^{\one}$ & $A_2$ & $c_{A}^{\one}$ & \colorbox{pink}{$\bm{\mu_{A_2}^{\one}}$} & \colorbox{pink}{$\bm{\sigma_{A_2}^{\one}}$} \\
+				$\one$ & $w^{\one}$ & $A_2$ & $c_{A}^{\one}$ & \colorbox{pink}{$\mu_{A_2}^{\one}$} & \colorbox{pink}{$\sigma_{A_2}^{\one}$} \\
 				$\one$ & $w^{\one}$ & $B_1$ & $c_{B}^{\one}$ & $\mu_{B_1}^{\one}$ & $\sigma_{B_1}^{\one}$ \\ 
 				$\one$ & $w^{\one}$ & $E_1$ & $c_{E}^{\one}$ & $\mu_{E_1}^{\one}$ & $\sigma_{E_1}^{\one}$ \\ 
 				\hline 
 				$\two$ & $w^{\two}$ & $A_1$ & $c_{A}^{\two}$ & $\mu_{A_1}^{\two}$ & $\sigma_{A_1}^{\two}$ \\
 				$\two$ & $w^{\two}$ & $E_1$ & $c_{E}^{\two}$ & $\mu_{E_1}^{\two}$ & $\sigma_{E_1}^{\two}$ \\
 				$\two$ & $w^{\two}$ & $D_1$ & $c_{D}^{\two}$ & $\mu_{D_1}^{\two}$ & $\sigma_{D_1}^{\two}$ \\
-				$\two$ & $w^{\two}$ & $D_2$ & $c_{D}^{\two}$ & \colorbox{LightGreen}{$\bm{\mu_{D_2}^{\two}}$} & \colorbox{LightGreen}{$\bm{\sigma_{D_2}^{\two}}$} \\
+				$\two$ & $w^{\two}$ & $D_2$ & $c_{D}^{\two}$ & \colorbox{LightGreen}{$\mu_{D_2}^{\two}$} & \colorbox{LightGreen}{$\sigma_{D_2}^{\two}$} \\
 				\bottomrule 
 			\end{tabular}
 		\end{subtable}	
@@ -205,8 +205,8 @@
 		\end{itemize}
 		\item Compute:
 		\begin{itemize} 
-			\item $\widehat{\mu} = \mbox{\texttt{mean}}(\widetilde{y_1}, \ldots, \widetilde{y_M})$ (community weighted mean), 
-			\item $\widehat{\sigma} = \mbox{\texttt{sdev}}(\widetilde{y_1}, \ldots, \widetilde{y_M})$ (community weighted standard deviation).
+			\item $\widehat{\mu} = \mbox{\texttt{mean}}(\widetilde{y_1}, \ldots, \widetilde{y_M})$ (community weighted mean trait for plot), 
+			\item $\widehat{\sigma} = \mbox{\texttt{sdev}}(\widetilde{y_1}, \ldots, \widetilde{y_M})$ (community weighted standard deviation of trait for plot).
 		\end{itemize}
 	\end{itemize}
 	
@@ -245,8 +245,15 @@
 		\end{equation*}
 \pagebreak 
 
-\section*{Sampling distributions}
-	
+\section*{Distributions for sampling}
+\subsection*{Trait sampling}
+For generating the samples ${[\widetilde{t_{k_r}^s}]}_i$, the distribution $D_t$ is a truncated normal with mean and standard deviation: $(\mu_{k_r}^s, \sigma_{k_r}^s)$. Along with the two moments, the truncation support must also be specified. Additionally, value clipping of the generated samples may be required (e.g. disallowing non-negative values). 
+
+\subsection*{\texttt{CoverWeight} sampling}
+\begin{itemize}
+\item \textbf{Percent cover}:	
+\item \textbf{Ordinal class}:
+\end{itemize}
 	
 	
 	
