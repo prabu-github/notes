@@ -1,7 +1,7 @@
 \documentclass[12pt]{article}
 \usepackage{array} % Provides advanced control over table column formatting
 \usepackage{xcolor}
-\usepackage[margin=0.3in]{geometry}
+\usepackage[margin=0.8in]{geometry}
 \usepackage{bm}
 \usepackage{scrextend}
 \usepackage{titlesec}
@@ -16,7 +16,7 @@
 \setlength{\cellspacetoplimit}{6pt}    % Minimum space above text
 \setlength{\cellspacebottomlimit}{6pt} % minimum space belowe text
 
-\changefontsizes{11pt}
+\changefontsizes{12pt}
 
 \newcommand{\sectionbreak}{\clearpage}
 \newcommand{\one}{1}
@@ -129,12 +129,12 @@
 		\vspace{0.5cm} % Adds vertical spacing between the two rows
 		
 		% Middle table
-		\begin{subtable}[b]{0.9\textwidth}
+		\begin{subtable}[b]{\textwidth}
 			\centering
 			\caption{Reduced data frame for \textbf{one-level} weighting.}.
 			\label{tab:l1_rdf}
 			\colorbox{gray!20}{
-			\begin{minipage}{\dimexpr\linewidth-2\fboxsep}
+			\begin{minipage} {\dimexpr\linewidth-2\fboxsep}
 				\centering
 				\vspace{0.2cm} % Padding inside the gray box
 				\begin{tabular}{c c c Sc Sc Sc}
@@ -252,7 +252,7 @@ For generating the samples ${[\widetilde{t_{k_r}^s}]}_i$, the distribution $D_t$
 \subsection*{\texttt{CoverWeight} sampling}
 
 \begin{itemize}
-	\item \textbf{Percent cover}: If \texttt{CoverWeight} = $p$, $p \in [l_j, r_j]$, a \texttt{TrunNormal} distribution with mean \colorbox{LightGray}{$p$}, standard deviation \colorbox{LightGray}{$d_j$} and support \colorbox{LightGray}{$[l_j, r_j]$} is used for sampling ${[\widetilde{c_k^s}]}_i$. 
+	\item \textbf{Percent cover}: If \texttt{CoverWeight} = $p$, $p \in [l_j, r_j]$, a \texttt{TrunNormal} distribution with mean \colorbox{LightGray}{$p$}, standard deviation \colorbox{LightGray}{$d_j$} and truncation to one $d_j$ is used for sampling ${[\widetilde{c_k^s}]}_i$. Additionally, the samples are clipped to the range $[0, 100]$ 
 	\begin{table}[htbp]
 		\centering
 		\caption{Specification for percent cover}
@@ -284,7 +284,13 @@ For generating the samples ${[\widetilde{t_{k_r}^s}]}_i$, the distribution $D_t$
 			\end{tabular}
 		\end{table}	
 		
-	\item \textbf{Role of bins}: For percent cover the bins are used for specifying a cover dependent uncertainty (via $d_j, l_j, r_j$) whereas in the case of ordinal class specficiation it defines the mode \textit{and} cover dependent uncertainty (mode is via $p_j$ and uncertainty via $q_j, l_j, r_j$).   
+	\item \textbf{Role of \texttt{Left}, \texttt{Right}}: 
+	\begin{itemize} 
+		\item 
+		For percent cover, \texttt{Left}, \texttt{Right} are used for specifying an uncertainty that depends on the range in which the percent cover lies. 
+		\item 
+		For ordinal class specficiation, \texttt{Left}, \texttt{Right} specify the support of  \texttt{Beta} distribution for that bin.   
+	\end{itemize}
 	\end{itemize}
 	
 \end{document}
