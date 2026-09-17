@@ -1,0 +1,125 @@
+\documentclass[11pt,letterpaper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{parskip}
+\usepackage[hidelinks]{hyperref}
+
+\definecolor{accent}{HTML}{3B6D11}
+\definecolor{titledark}{HTML}{2C4A20}
+\definecolor{muted}{HTML}{5F5E5A}
+\definecolor{rulegray}{HTML}{C9C7BE}
+\definecolor{headfill}{HTML}{E8EDE4}
+
+\titleformat{\section}{\normalfont\large\bfseries\color{accent}}{}{0pt}{}
+\titlespacing*{\section}{0pt}{1.4em}{0.5em}
+
+\newcommand{\unit}[1]{\ensuremath{\mathrm{#1}}}
+\newcommand{\Vcmax}{\ensuremath{V_{\mathrm{cmax}}}}
+\newcommand{\Jmax}{\ensuremath{J_{\mathrm{max}}}}
+
+\setlist[itemize]{leftmargin=1.4em, itemsep=0.35em, topsep=0.4em}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+
+\begin{document}
+
+{\noindent\color{titledark}\LARGE\bfseries Spectrophotometer vs.\ spectroradiometer\par}
+\vspace{0.4em}
+{\noindent\color{rulegray}\rule{\textwidth}{0.8pt}\par}
+\vspace{0.5em}
+{\noindent\color{muted}\itshape Two instruments that both produce a spectrum, separated by where the
+light comes from and what the numbers mean.\par}
+\vspace{1.2em}
+
+\noindent\textbf{In short:} a spectrophotometer makes its own light and measures how a sample
+interacts with it. A spectroradiometer measures whatever light arrives, in absolute physical units.
+
+\section{Spectrophotometer}
+
+\begin{itemize}
+  \item \textbf{Has an internal light source} --- tungsten-halogen, deuterium, or xenon flash ---
+        plus a sample holder in a fixed, controlled geometry.
+  \item \textbf{Measures a ratio, not absolute energy}: transmittance or reflectance relative to a
+        reference (a blank cuvette, a white Spectralon standard) measured through the same optical
+        path. Output is unitless, reported as $0$--$1$ or a percentage, or as absorbance
+        $A = -\log_{10} T$.
+  \item Because source, path length, and geometry are fixed, the ratio is stable and reproducible.
+        That is the entire point of the design.
+  \item \textbf{Typical instruments:} Cary 5000, Shimadzu UV-3600, and the integrating-sphere leaf
+        clips such as the ASD or PSR contact probe and the LI-COR 6800 leaf spectrometer. Anything
+        using an integrating sphere for leaf reflectance and transmittance is effectively operating
+        in spectrophotometer mode.
+\end{itemize}
+
+\section{Spectroradiometer}
+
+\begin{itemize}
+  \item \textbf{No internal source} --- it is a passive detector pointed at a scene, calibrated to
+        report absolute radiometric quantities: spectral radiance in
+        $\unit{W\,m^{-2}\,sr^{-1}\,nm^{-1}}$, or irradiance in $\unit{W\,m^{-2}\,nm^{-1}}$.
+  \item Requires a radiometric calibration traceable to a standard lamp, together with a defined
+        field of view or a cosine-corrected diffuser.
+  \item To obtain reflectance you take two measurements --- target radiance and a white reference
+        panel under the same illumination --- and form the ratio yourself. Illumination is the sun,
+        or whatever is there, so it changes between scans.
+  \item \textbf{Typical instruments:} ASD FieldSpec, Spectra Vista SVC HR-1024i, PSR+, and the
+        sensors aboard airborne and satellite imaging spectrometers such as AVIRIS-NG, EMIT, and
+        PRISMA.
+\end{itemize}
+
+\section{Side by side}
+
+\vspace{0.3em}
+\noindent
+{\small\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.21\textwidth} L L@{}}
+\toprule
+& \textbf{Spectrophotometer} & \textbf{Spectroradiometer} \\
+\midrule
+\textbf{Illumination}
+  & Internal, constant, controlled
+  & Ambient --- sun, sky, or whatever is present \\[0.4em]
+\textbf{Native output}
+  & A ratio: reflectance, transmittance, absorbance
+  & Absolute radiance or irradiance in physical units \\[0.4em]
+\textbf{Getting reflectance}
+  & Direct, in one step against a blank or white standard
+  & Two steps: target radiance ratioed to a white panel \\[0.4em]
+\textbf{Scale of measurement}
+  & Leaf or sample
+  & Leaf through canopy to whole scene \\[0.4em]
+\textbf{Dominant noise sources}
+  & Instrument drift, stray light, sphere substitution error
+  & Sun angle, cloud, BRDF, atmosphere, background \\
+\bottomrule
+\end{tabularx}
+}
+\vspace{0.6em}
+
+\section{Why it matters for hyperspectral trait work}
+
+For partial least squares regression models predicting nitrogen, LMA, chlorophyll, carotenoids,
+\Vcmax, \Jmax, cellulose, and lignin, leaf-level spectra from a contact probe or integrating sphere
+--- spectrophotometer-style, with a fixed artificial source --- are far cleaner than anything
+measured passively. That is the main reason leaf-level trait models validate so much better than
+canopy-level ones.
+
+When the same model is transferred to canopy spectroradiometer data, the degradation you observe is
+mostly illumination geometry, structural scattering, and background contribution. It is rarely a
+failure of the underlying chemistry--spectra relationship.
+
+\section{A note on terminology}
+
+Field instruments such as the ASD FieldSpec are spectroradiometers. Attach a contact probe with its
+own lamp, however, and you are using one as a spectrophotometer. The hardware category and the
+measurement mode are not the same thing, and papers are not always careful about the distinction.
+
+\end{document}

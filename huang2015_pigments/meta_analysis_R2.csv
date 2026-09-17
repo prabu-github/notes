@@ -1,0 +1,15 @@
+pigment,scale,r2,err_low,err_high,n_studies
+Chl tot,Leaves,0.883,0.015,0.013,53
+Chl tot,Canopies,0.73,0.05,0.045,23
+Chl tot,Landscape,0.791,0.033,0.037,17
+Chl a,Leaves,0.914,0.019,0.021,23
+Chl a,Canopies,0.772,0.043,0.045,4
+Chl a,Landscape,0.825,0.141,0.142,3
+Chl b,Leaves,0.883,0.03,0.028,10
+Chl b,Canopies,0.841,0.058,0.055,1
+Chl b,Landscape,0.909,0.039,0.039,1
+Cars,Leaves,0.875,0.036,0.031,15
+Cars,Canopies,0.804,0.099,0.099,2
+Cars,Landscape,0.853,0.091,0.093,3
+Anth,Leaves,0.933,0.018,0.015,17
+Anth,Landscape,0.347,0.168,0.169,1
