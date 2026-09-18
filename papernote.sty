@@ -1,0 +1,35 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{papernote}[2026/09/18 Shared preamble for paper reading notes]
+
+% Shared look for every paper note. Topic notes (community_weighting,
+% integrating_sphere, spectroXmeter) have their own preambles and do not use this.
+
+\RequirePackage[T1]{fontenc}
+\RequirePackage[utf8]{inputenc}
+\RequirePackage{lmodern}
+\RequirePackage[margin=0.75in]{geometry}
+\RequirePackage{graphicx}
+\RequirePackage{float}
+\RequirePackage{xcolor}
+\RequirePackage[font=small,labelfont=bf,skip=6pt]{caption}
+
+\definecolor{doiblue}{HTML}{185FA5}
+\RequirePackage[colorlinks=true,urlcolor=doiblue,linkcolor=doiblue]{hyperref}
+
+\setlength{\parindent}{0pt}
+
+% \papertitle{file} — the title screenshot that opens a note.
+% Uncaptioned and deliberately left out of the figure numbering, so the
+% first real figure is Figure 1. Omit this line when a paper has no image.
+\newcommand{\papertitle}[1]{%
+  \begin{figure}[H]%
+  \centering
+  \includegraphics[width=\textwidth]{#1}%
+  \end{figure}%
+  \vspace{1em}%
+}
+
+% \paperdoi{10.xxxx/yyyy} — linked DOI, shown bare.
+\newcommand{\paperdoi}[1]{\href{https://doi.org/#1}{#1}}
+
+\endinput
