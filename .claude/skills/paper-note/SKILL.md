@@ -10,9 +10,15 @@ paper mattered — not a summary.
 
 ## Layout
 
+Everything paper-related lives in `papernotes/` (set 2026-09-18). The repo root
+is for topic notes only — `community_weighting`, `integrating_sphere`,
+`spectroXmeter` — which have their own preambles and are not paper notes.
+
 ```
-<key>.tex        the note, at the repo root
-<key>/           every figure for that note, nothing else
+papernotes/<key>.tex        the note
+papernotes/<key>/           every figure for that note, nothing else
+papernotes/papernote.sty    shared preamble
+papernotes/_template.tex    skeleton to copy
 ```
 
 `<key>` is `firstauthorYEAR_topic`, lowercase, e.g. `huang2015_pigments`,
@@ -29,13 +35,13 @@ the DOI; he does not want the DOI resolved, the title fetched, or the abstract
 read (said 2026-09-18). The takeaways are his to write, not ours to draft from an
 abstract.
 
-1. Copy `_template.tex` to `<key>.tex` and `mkdir <key>`. Replace `KEY` in the
-   header comment and in `\graphicspath`.
+1. In `papernotes/`, copy `_template.tex` to `<key>.tex` and `mkdir <key>`.
+   Replace `KEY` in the header comment and in `\graphicspath`.
 2. Replace `KEY/` in `\graphicspath` with the real key.
 3. Fill `\paperdoi{...}` with the bare DOI — no `https://doi.org/` prefix, the
    macro adds it.
 4. Write the takeaways (see below).
-5. `make <key>.pdf`, then show the PDF in the file pane.
+5. `make papernotes/<key>.pdf` from the repo root, then show the note.
 
 `papernote.sty` carries the shared preamble; never copy those packages into a
 note. Anything genuinely specific to one note (a `\newlength` for panel sizing,
@@ -66,14 +72,16 @@ all is fine: takeaways alone, no `\clearpage`.
 
 ## Adding a figure later
 
-Put the file in `<key>/`, add a `figure[H]` block with a caption and a
+Put the file in `papernotes/<key>/`, add a `figure[H]` block with a caption and a
 `\label{fig:...}`, and reference it from the relevant bullet. Use `\clearpage`
 between figures that each want their own page.
 
 ## Building
 
-`make <key>.pdf` runs pdflatex twice so `\ref` resolves; `make` alone rebuilds
-every note whose source is newer than its PDF. Expect font-substitution
+`make papernotes/<key>.pdf` runs pdflatex twice so `\ref` resolves, from inside
+`papernotes/` so `\graphicspath` and `papernote.sty` resolve; it then deletes
+the `.aux`/`.log`/`.out` it produced. `make` alone rebuilds every note, paper or
+topic, whose source is newer than its PDF. Expect font-substitution
 warnings from the topic notes — cosmetic, not errors. PDFs are tracked in git
 here, so a rebuild shows up as a change.
 
@@ -83,17 +91,8 @@ however small, is followed by `make <key>.pdf` and then the PDF in the file
 pane. Do not open the `.tex` in the pane, and do not paste LaTeX into the reply
 unless he asks to see the markup.
 
-**The file pane will not render PDFs on this machine** (tested 2026-09-18: a
-29 KB and a 713 KB valid PDF both showed blank; bouncing the pane off the
-`.tex`, off another PDF, and closing/reopening all failed). PNGs render fine.
-So show the note as images:
+Show the **PDF** in the file pane — never a PNG rendering of it (Prabu ruled
+that out 2026-09-18). If the pane shows it blank, say so and leave it; do not
+substitute page images.
 
-```
-make <key>.pdf
-mutool draw -r 110 -o .preview/<key>_p%d.png <key>.pdf
-```
-
-then show `.preview/<key>_p1.png` in the pane, and mention the other pages if
-there is more than one. `.preview/` is gitignored. Re-test the PDF path
-occasionally — it worked earlier in the repo's history, so this may be a
-temporary app problem rather than a permanent one.
+The pane caches by path: point it at another file first, then at the PDF.
